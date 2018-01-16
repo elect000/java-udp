@@ -11,7 +11,8 @@ public class AnimUDPServerColor0Thread {
         InetAddress clientAddress;
         int clientPort;
         BufferedInputStream bitStream;
-        String filename = "bane.raw";
+        // String filename = "bane.raw";
+        String filename;
         int waitTime = 100;
         int width = 160;
         int height = 120;
@@ -30,6 +31,9 @@ public class AnimUDPServerColor0Thread {
 
         public UDPThread (DatagramPacket receivePacket) {
             this.receivePacket = receivePacket;
+            // set filename ---------------------------------------
+            filename = new String(this.receivePacket.getData (), 0, this.receivePacket.getLength ());
+            System.out.println("Request: "+ filename);
             // child Thread ----------------------------------------
             this.clientAddress = receivePacket.getAddress ();
             this.clientPort = receivePacket.getPort ();

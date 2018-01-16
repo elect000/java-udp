@@ -14,7 +14,7 @@ import java.net.InetAddress;
 
 class AnimUDPClientColor0{
     public static void main(String[] args){
-        AppFrame3 f=new AppFrame3(args[0]);
+        AppFrame3 f=new AppFrame3(args[0], args[1]);
         f.setSize(640,480);
         f.addWindowListener(new WindowAdapter(){
                 @Override public void windowClosing(WindowEvent e){
@@ -27,9 +27,11 @@ class AnimUDPClientColor0{
 @SuppressWarnings("serial")
 class AppFrame3 extends Frame{
     String hostname;
+    String filename;
     ImageSocket2 imgsock = null;
-    AppFrame3(String hostname){
+    AppFrame3(String hostname, String filename){
         this.hostname = hostname;
+        this.filename = filename;
     }
     @Override public void update(Graphics g){
         paint(g);
@@ -40,7 +42,7 @@ class AppFrame3 extends Frame{
             if(img!=null)
                 g.drawImage(img,10,50,480,360,this);
         }else{
-            imgsock = new ImageSocket2(hostname);
+            imgsock = new ImageSocket2(hostname, filename);
         }
         repaint(1);
     }
@@ -61,9 +63,9 @@ class ImageSocket2{
     DatagramPacket receivePacket3;
     DatagramPacket ackPacket;
     boolean fin = false;
-    ImageSocket2(String hostname){
+    ImageSocket2(String hostname, String filename){
         
-        byte request[] = "REQUEST".getBytes();
+        byte request[] = filename.getBytes();
         ack = "Ack".getBytes();	
 
         try{
@@ -138,6 +140,7 @@ class ImageSocket2{
 
             socket.receive(receivePacket1);
             socket.send(ackPacket);
+
             if(buf[0]<0){
                 socket.close();
                 System.out.println("Done");
